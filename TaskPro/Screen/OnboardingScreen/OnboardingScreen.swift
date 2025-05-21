@@ -71,7 +71,6 @@ struct OnboardingScreen: View {
                         }
                     } else {
                         hasSeenOnboarding = true
-                        ContentView()
                     }
                 }
             } label: {

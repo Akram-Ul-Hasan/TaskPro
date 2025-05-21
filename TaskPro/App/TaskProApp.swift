@@ -11,11 +11,12 @@ import SwiftUI
 struct TaskProApp: App {
     
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
-    
+    @StateObject private var coordinator = AppCoordinator()
+
     var body: some Scene {
         WindowGroup {
             if hasSeenOnboarding {
-                ContentView()
+                RootTabView(coordinator: coordinator)
             } else {
                 OnboardingScreen()
             }
