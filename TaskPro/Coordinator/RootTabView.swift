@@ -8,6 +8,7 @@ import SwiftUI
 
 enum AppTab: Hashable {
     case tasks
+    case calendar
     case starred
     case settings
 }
@@ -22,6 +23,12 @@ struct RootTabView: View {
                     Label("Tasks", systemImage: "checkmark.circle")
                 }
                 .tag(AppTab.tasks)
+            
+            CalenderTabView()
+                .tabItem {
+                    Label("Calendar", systemImage: "calendar")
+                }
+                .tag(AppTab.calendar)
             
             StarredView()
                 .tabItem {

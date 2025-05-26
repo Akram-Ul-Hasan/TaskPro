@@ -39,8 +39,8 @@ struct TaskCellView: View {
     }
 }
 
-#Preview {
-    let task = TaskModel(name: "Meeting", priority: .medium)
-    TaskCellView(task: task)
-        .modelContainer(for: [TaskListModel.self, TaskModel.self])
-}
+//#Preview {
+//    let task = TaskModel(name: "Meeting", priority: .medium, taskDate: <#Date#>)
+//    TaskCellView(task: task)
+//        .modelContainer(for: [TaskListModel.self, TaskModel.self])
+//}

@@ -65,7 +65,7 @@ struct TaskListDetailsScreen: View {
                     }
                     .onDelete(perform: deleteList)
                     .navigationDestination(isPresented: $isTaskSelected) {
-                        if let task = selectedTask {
+                        if selectedTask != nil {
                             TaskDetailsScreen()
                         }
                     }

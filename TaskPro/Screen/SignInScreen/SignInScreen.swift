@@ -28,7 +28,7 @@ struct SignInScreen: View {
                 // Sign in Buttons
                 VStack(spacing: 16) {
                     Button(action: {
-                        FireAuth.share.signinWithGoogle(presenting: getRootViewController()) { error in
+                        AuthManager.shared.signinWithGoogle(presenting: getRootViewController()) { error in
                             print("Error from signinWithGoogle: \(error?.localizedDescription ?? "")")
                         }
                     }) {

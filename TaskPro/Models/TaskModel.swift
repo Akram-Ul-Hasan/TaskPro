@@ -13,7 +13,7 @@ class TaskModel {
     var id: UUID
     var name: String
     var detail: String?
-    var notifyTime: Date?
+    var taskDate: Date
     var priority: TaskPriorityType
     var createdAt: Date
     var isStarred: Bool
@@ -24,11 +24,11 @@ class TaskModel {
     @Relationship
     var list: TaskListModel?
     
-    init(name: String, detail: String? = nil, notifyTime: Date? = nil, priority: TaskPriorityType, list: TaskListModel? = nil, isStarred: Bool = false, themeColor: String? = "FFFFFF", isSynced: Bool = false, isCompleted: Bool = false) {
+    init(name: String, detail: String? = nil, taskDate: Date, priority: TaskPriorityType, list: TaskListModel? = nil, isStarred: Bool = false, themeColor: String? = "FFFFFF", isSynced: Bool = false, isCompleted: Bool = false) {
         self.id = UUID()
         self.name = name
         self.detail = detail
-        self.notifyTime = notifyTime
+        self.taskDate = taskDate
         self.priority = priority
         self.createdAt = Date()
         self.list = list

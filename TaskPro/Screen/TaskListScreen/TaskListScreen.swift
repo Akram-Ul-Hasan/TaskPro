@@ -40,6 +40,7 @@ struct TaskListScreen: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                
                 if allList.isEmpty {
                     Text("No lists here")
                         .font(.title3)
@@ -134,12 +135,12 @@ struct TaskListScreen: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        TaskListScreen()
-            .modelContainer(for: [TaskListModel.self, TaskModel.self])
-
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        TaskListScreen()
+//            .modelContainer(for: [TaskListModel.self, TaskModel.self])
+//
+//    }
+//}
 
 
