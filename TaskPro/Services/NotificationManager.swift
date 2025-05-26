@@ -23,7 +23,7 @@ struct NotificationManager {
         ), repeats: false)
 
         let request = UNNotificationRequest(
-            identifier: task.idx.uuidString,
+            identifier: task.id.uuidString,
             content: content,
             trigger: trigger
         )

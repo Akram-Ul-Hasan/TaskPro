@@ -18,11 +18,13 @@ class TaskModel {
     var createdAt: Date
     var isStarred: Bool
     var themeColorHex: String?
+    var isSynced: Bool
+    var isCompleted: Bool
     
     @Relationship
     var list: TaskListModel?
     
-    init(name: String, detail: String? = nil, notifyTime: Date? = nil, priority: TaskPriorityType, list: TaskListModel? = nil, isStarred: Bool = false, themeColor: String? = "FFFFFF") {
+    init(name: String, detail: String? = nil, notifyTime: Date? = nil, priority: TaskPriorityType, list: TaskListModel? = nil, isStarred: Bool = false, themeColor: String? = "FFFFFF", isSynced: Bool = false, isCompleted: Bool = false) {
         self.id = UUID()
         self.name = name
         self.detail = detail
@@ -32,5 +34,7 @@ class TaskModel {
         self.list = list
         self.isStarred = isStarred
         self.themeColorHex = themeColor
+        self.isSynced = isSynced
+        self.isCompleted = isCompleted
     }
 }
