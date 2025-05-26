@@ -11,7 +11,6 @@ struct StarredView: View {
     var body: some View {
         NavigationStack {
             Text("Starred Tasks")
-                .navigationTitle("Starred")
         }
     }
 }

@@ -9,9 +9,6 @@ import SwiftUI
 
 struct TaskListView: View {
     var body: some View {
-        NavigationStack {
-            Text("Task List")
-                .navigationTitle("Tasks")
-        }
+        TaskListScreen()
     }
 }

@@ -13,23 +13,23 @@ class TaskModel {
     var id: UUID
     var name: String
     var detail: String?
-    var dueTime: Date
+    var notifyTime: Date?
     var priority: TaskPriorityType
     var createdAt: Date
     var isStarred: Bool
     var themeColorHex: String?
     
     @Relationship
-    var group: TaskGroupModel?
+    var list: TaskListModel?
     
-    init(name: String, detail: String? = nil, dueTime: Date, priority: TaskPriorityType, group: TaskGroupModel? = nil, isStarred: Bool = false, themeColor: String) {
+    init(name: String, detail: String? = nil, notifyTime: Date? = nil, priority: TaskPriorityType, list: TaskListModel? = nil, isStarred: Bool = false, themeColor: String? = "FFFFFF") {
         self.id = UUID()
         self.name = name
         self.detail = detail
-        self.dueTime = dueTime
+        self.notifyTime = notifyTime
         self.priority = priority
         self.createdAt = Date()
-        self.group = group
+        self.list = list
         self.isStarred = isStarred
         self.themeColorHex = themeColor
     }

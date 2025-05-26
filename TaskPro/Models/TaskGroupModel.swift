@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class TaskGroupModel {
+final class TaskListModel: Identifiable {
     var id: UUID
     var title: String
     var createdAt: Date

@@ -7,29 +7,6 @@
 
 import SwiftUI
 
-enum OnboardingPage: Int, CaseIterable {
-    case first, second, third
-
-    var title: String {
-        switch self {
-        case .first: return "Welcome to TaskPro"
-        case .second: return "Organize Smartly"
-        case .third: return "Stay Notified"
-        }
-    }
-
-    var description: String {
-        switch self {
-        case .first:
-            return "Keep track of important things you need to get done in one place."
-        case .second:
-            return "Group your tasks into custom lists. Add, edit, and manage your workflow with ease and clarity."
-        case .third:
-            return "TaskPro can remind you about important deadlines and events. You’ll never miss what matters."
-        }
-    }
-}
-
 struct OnboardingScreen: View {
     
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
@@ -37,11 +14,12 @@ struct OnboardingScreen: View {
     @State private var currentPage = 0
     @State private var isAnimating = false
     @State private var deliveryOffset = false
-    
+    @State private var navigateToSignIn = false
+
     var body: some View {
         VStack {
             TabView(selection: $currentPage) {
-                ForEach(OnboardingPage.allCases, id: \.rawValue) { page in
+                ForEach(OnboardingAnimationPageType.allCases, id: \.rawValue) { page in
                     onboardingView(for: page)
                         .tag(page.rawValue)
                 }
@@ -49,9 +27,8 @@ struct OnboardingScreen: View {
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .animation(.spring(), value: currentPage)
             
-            // Page indicator
             HStack(spacing: 12) {
-                ForEach(0..<OnboardingPage.allCases.count, id: \.self) { index in
+                ForEach(0..<OnboardingAnimationPageType.allCases.count, id: \.self) { index in
                     Circle()
                         .fill(currentPage == index ? Color.blue : Color.gray.opacity(0.5))
                         .frame(width: currentPage == index ? 12 : 8, height: currentPage == index ? 12 : 8)
@@ -60,10 +37,9 @@ struct OnboardingScreen: View {
             }
             .padding(.bottom, 20)
             
-            // Button
             Button {
                 withAnimation(.spring()) {
-                    if currentPage < OnboardingPage.allCases.count - 1 {
+                    if currentPage < OnboardingAnimationPageType.allCases.count - 1 {
                         currentPage += 1
                         isAnimating = false
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -74,7 +50,7 @@ struct OnboardingScreen: View {
                     }
                 }
             } label: {
-                Text(currentPage < OnboardingPage.allCases.count - 1 ? "Next" : "Get Started")
+                Text(currentPage < OnboardingAnimationPageType.allCases.count - 1 ? "Next" : "Get Started")
                     .font(.system(.title3, design: .rounded))
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -90,6 +66,7 @@ struct OnboardingScreen: View {
             }
             .padding(.horizontal, 30)
             .padding(.bottom)
+            
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -102,7 +79,7 @@ struct OnboardingScreen: View {
     
     // MARK: - Onboarding View
     @ViewBuilder
-    private func onboardingView(for page: OnboardingPage) -> some View {
+    private func onboardingView(for page: OnboardingAnimationPageType) -> some View {
         VStack(spacing: 20) {
             ZStack {
                 switch page {

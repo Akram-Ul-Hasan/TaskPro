@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TaskPriorityType: Int, Codable, CaseIterable {
+enum TaskPriorityType: String, Codable, CaseIterable {
     case veryLow
     case low
     case medium
