@@ -10,10 +10,13 @@ import GoogleSignIn
 import FirebaseCore
 import FirebaseAuth
 
-class AuthManager {
+final class AuthManager {
+    
     static let shared = AuthManager()
 
     private init() {}
+    
+    
     
     func signinWithGoogle(presenting: UIViewController, completion: @escaping(Error?) -> Void) {
         

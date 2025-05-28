@@ -17,12 +17,14 @@ enum TaskListSheets: Identifiable {
     }
 }
 struct TaskListScreen: View {
-
+    
     @Environment(\.modelContext) private var context
     
     @Query(sort: \TaskListModel.createdAt, order: .reverse) private var allList: [TaskListModel]
+    @Query private var allTask: [TaskModel]
     @State private var activeSheet: TaskListSheets?
-
+    //    @State private var selectedList: TaskListModel
+    
     private func deleteList(indexSet: IndexSet) {
         indexSet.forEach { index in
             let list = allList[index]
@@ -40,84 +42,118 @@ struct TaskListScreen: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                //background color
+                Color("WhiteLevel1")
+                    .ignoresSafeArea()
                 
-                if allList.isEmpty {
-                    Text("No lists here")
-                        .font(.title3)
-                        .foregroundColor(.secondary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                } else {
-                    List {
-                        ForEach(allList) { list in
-                            NavigationLink(value: list) {
-                                TaskListCellView(list: list)
-                            }
-                            
-                        }
-                        .onDelete(perform: deleteList)
-                    }
-                    .navigationDestination(for: TaskListModel.self) { list in
-                        TaskListDetailsScreen(list: list)
-                            .navigationTitle(list.title)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
                         
-                    }
-                    .listStyle(.plain)
-                }
-                
-                
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            activeSheet = .addTaskList
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 25, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 50, height: 50)
-                                .background(Color.blue)
-                                .clipShape(Circle())
-                                .shadow(radius: 4)
+                        //Greeting
+                        VStack(alignment: .leading, spacing: 5) {
+                            
+                            Text("Hello Akram")
+                                .font(.largeTitle).bold()
+                            
+                            Text("Have a nice day")
+                                .font(.subheadline.bold())
+                                .foregroundColor(.secondary)
+                        }.padding(.leading, 20)
+                        
+                        //task list scrollview
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                VStack {
+                                    Image(systemName: "plus")
+                                    Text("Add New Task Group")
+                                }
+                                .frame(width: 250, height: 200)
+                                .background(Gradient(colors: [.purple, .blue]))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .padding(.leading, 20)
+                                .onTapGesture {
+                                    activeSheet = .addTaskList
+                                }
+                                
+                                ForEach(allList) { list in
+                                    NavigationLink(value: list) {
+                                        TaskListCellView(list: list)
+                                    }
+                                    
+                                }
+                                .onDelete(perform: deleteList)
+                            }
                         }
                         .padding(.bottom, 60)
-                        .padding(.trailing, 50)
+                    }
+                    
+                    
+                    VStack(alignment: .leading) {
+                        Text("Tasks")
+                            .font(.title)
+                            .foregroundStyle(.primary)
+                            .fontWeight(.bold)
+                            .padding(.bottom, 25)
+                            .padding(.horizontal, 20)
+                        
+                        ForEach(0..<2/*allTask.count*/) { _ in
+                            HStack {
+                                // Icon
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color.purple)
+                                    //                                            .foregroundStyle(Gradient(colors: [.purple, .blue]))
+                                        .frame(width: 44, height: 44)
+                                    
+                                    Image(systemName: "calendar")
+                                        .foregroundStyle(.white)
+                                        .font(.system(size: 20, weight: .medium))
+                                }
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Design Changes")
+                                        .font(.headline)
+                                        .foregroundColor(.black)
+                                    Text("2 Days ago")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                                
+                                Spacer()
+                                
+                                // Ellipsis Icon
+                                Image(systemName: "ellipsis")
+                                    .rotationEffect(.degrees(90)) // make it vertical
+                                    .foregroundColor(.gray)
+                            }
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(16)
+                            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+                            .padding(.horizontal)
+                            
+                        }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
             }
-            .navigationTitle("All Lists")
-            .navigationBarTitleDisplayMode(.large)
+            .frame(maxWidth: .infinity)
+            
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        activeSheet = .sort
+                        
                     }) {
                         HStack {
-                            Text("Sort by")
-                                .foregroundColor(.primary)
-
                             
-                            Image(systemName: "chevron.down")
-                                .font(.caption)
+                            Image(systemName: "person.crop.circle.fill")
+                                .resizable()
+                                .scaledToFill()
+                                .font(.title2)
                                 .foregroundColor(.primary)
+                                .padding(.trailing, 10)
                         }
-                        .font(.subheadline)
-                        .padding(.horizontal, 15)
-                        .padding(.vertical, 8)
-                        .background(
-                            Color.gray.opacity(0.01)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 21)
-                                .stroke(Color.gray, lineWidth: 1)
-                                .foregroundStyle(.gray.opacity(0.2))
-                                .background(Color.gray.opacity(0.2))
-
-                        )
-                        .cornerRadius(21)
-
                     }
                 }
             }
@@ -131,16 +167,18 @@ struct TaskListScreen: View {
                         .presentationDetents([.fraction(0.3)])
                 }
             })
+            
         }
     }
+    
 }
 
-//#Preview {
-//    NavigationStack {
-//        TaskListScreen()
-//            .modelContainer(for: [TaskListModel.self, TaskModel.self])
-//
-//    }
-//}
+#Preview {
+    NavigationStack {
+        TaskListScreen()
+            .modelContainer(for: [TaskListModel.self, TaskModel.self])
+
+    }
+}
 
 

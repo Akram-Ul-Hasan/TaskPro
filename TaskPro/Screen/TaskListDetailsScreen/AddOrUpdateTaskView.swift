@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct AddOrUpdateTaskView: View {
+    
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
-
+    
     var list: TaskListModel
     
     @State private var name: String = ""
@@ -18,14 +19,14 @@ struct AddOrUpdateTaskView: View {
     @State private var priority: TaskPriorityType = .medium
     @State private var themeColor: String = ""
     @State private var isStarred: Bool = false
-    @State private var dueTime : Date? = nil
+    @State private var taskDate : Date = Date.now
     
     private var isTitleValid: Bool {
         !name.isEmptyOrWhiteSpace
     }
     
     private func saveTask() {
-        let task = TaskModel(name: name, priority: priority, list: list)
+        let task = TaskModel(name: name, taskDate: taskDate, priority: priority, list: list)
         context.insert(task)
         list.tasks.append(task)
         
@@ -61,7 +62,7 @@ struct AddOrUpdateTaskView: View {
                     .autocapitalization(.words)
                     .disableAutocorrection(true)
                     .padding(.bottom, 20)
-
+                
                 Text("Task description (Optional)")
                     .font(.caption)
                     .foregroundColor(.gray)
@@ -99,6 +100,16 @@ struct AddOrUpdateTaskView: View {
             }
             .padding(.horizontal)
             
+            
+            DatePicker(
+                "Select Date & Time",
+                selection: $taskDate,
+                displayedComponents: [.date, .hourAndMinute]
+            )
+            .datePickerStyle(GraphicalDatePickerStyle())
+            .environment(\.colorScheme, .dark)
+            
+            Text("Selected: \(taskDate.formatted(date: .abbreviated, time: .shortened))")
             Spacer()
             
             PrimaryButton(title: "Save", isDisabled: !isTitleValid) {

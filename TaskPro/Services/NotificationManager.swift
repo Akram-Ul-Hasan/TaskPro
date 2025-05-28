@@ -10,7 +10,6 @@ import UserNotifications
 
 struct NotificationManager {
     static func scheduleNotification(for task: TaskModel) {
-        guard let date = task.notifyTime else { return }
 
         let content = UNMutableNotificationContent()
         content.title = task.name
@@ -19,7 +18,7 @@ struct NotificationManager {
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents(
             [.year, .month, .day, .hour, .minute],
-            from: date
+            from: task.taskDate
         ), repeats: false)
 
         let request = UNNotificationRequest(
