@@ -20,6 +20,8 @@ struct TaskListScreen: View {
     
     @Environment(\.modelContext) private var context
     
+    @ObservedObject private var user = AuthManager.shared
+    
     @Query(sort: \TaskListModel.createdAt, order: .reverse) private var allList: [TaskListModel]
     @Query private var allTask: [TaskModel]
     @State private var activeSheet: TaskListSheets?
@@ -52,7 +54,7 @@ struct TaskListScreen: View {
                         //Greeting
                         VStack(alignment: .leading, spacing: 5) {
                             
-                            Text("Hello Akram")
+                            Text("Hello \(user.currentUser?.name ?? "User")")
                                 .font(.largeTitle).bold()
                             
                             Text("Have a nice day")

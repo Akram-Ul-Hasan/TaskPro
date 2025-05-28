@@ -9,13 +9,14 @@ import SwiftUI
 
 @main
 struct TaskProApp: App {
-    
+
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @AppStorage("signIn") private var signIn = false
     
     @StateObject private var coordinator = AppCoordinator()
+    @StateObject private var auth = AuthManager.shared
 
     var body: some Scene {
         WindowGroup {

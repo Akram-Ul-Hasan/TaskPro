@@ -26,12 +26,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
     
     private func requestNotificationPermission() {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                if granted {
-                    print("✅ Notification permission granted")
-                } else {
-                    print("❌ Notification permission denied or error: \(String(describing: error))")
-                }
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                print("✅ Notification permission granted")
+            } else {
+                print("❌ Notification permission denied or error: \(String(describing: error))")
             }
         }
+    }
 }

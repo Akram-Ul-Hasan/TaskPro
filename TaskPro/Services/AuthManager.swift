@@ -10,13 +10,14 @@ import GoogleSignIn
 import FirebaseCore
 import FirebaseAuth
 
-final class AuthManager {
+final class AuthManager: ObservableObject {
+    
+    @Published var currentUser: UserModel? = nil
+    @Published var isSignedIn: Bool = false
     
     static let shared = AuthManager()
 
     private init() {}
-    
-    
     
     func signinWithGoogle(presenting: UIViewController, completion: @escaping(Error?) -> Void) {
         
@@ -48,8 +49,18 @@ final class AuthManager {
                     return
                 }
                 
-                print("Sign in with Google sucessfully")
-                
+                if let firebaseUser = result?.user {
+                    let user = UserModel(
+                        uid: firebaseUser.uid,
+                        name: firebaseUser.displayName ?? "",
+                        email: firebaseUser.email,
+                        photoURL: firebaseUser.photoURL?.absoluteURL,
+                        userType: .loggedIn)
+                    
+                    self.currentUser = user
+                    print("Sign in with Google sucessfully")
+
+                }
                 UserDefaults.standard.set(true, forKey: "signIn")
                 
             }
@@ -60,7 +71,8 @@ final class AuthManager {
     func signOut(session: UserSession) {
         do {
             try Auth.auth().signOut()
-            session.clear()
+            self.currentUser = nil
+//            session.clear()
         } catch {
             print("❌ Sign out error: \(error)")
         }
