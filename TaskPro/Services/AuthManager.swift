@@ -9,6 +9,8 @@ import SwiftUI
 import GoogleSignIn
 import FirebaseCore
 import FirebaseAuth
+import AuthenticationServices
+import LocalAuthentication
 
 final class AuthManager: ObservableObject {
     
@@ -67,14 +69,44 @@ final class AuthManager: ObservableObject {
         }
     }
     
+    func signInWithApple(_ result: Result<ASAuthorization, Error>) {
+        switch result {
+        case .success(let authorization):
+            if let _ = authorization.credential as? ASAuthorizationAppleIDCredential {
+                UserDefaults.standard.set(true, forKey: "signIn")
+            }
+        case .failure(let error):
+            print("Apple Id Sign in error: \(error.localizedDescription)")
+        }
+    }
+    
+    func authenticationWithBioMetries() {
+        let context = LAContext()
+        var error: NSError?
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "Authentication with Face ID or Touch ID"
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, error in
+                if success {
+                    UserDefaults.standard.set(true, forKey: "signIn")
+                } else {
+                    print("Authentication with Biomatries error: \(error?.localizedDescription ?? "Biomatries Error")")
+                }
+            }
+        } else {
+            print("Authentication with Biomatries error: \(error?.localizedDescription ?? "Biomatries Error")")
+        }
+    }
     
     func signOut(session: UserSession) {
         do {
             try Auth.auth().signOut()
             self.currentUser = nil
-//            session.clear()
+            UserDefaults.standard.set(false, forKey: "signIn")
         } catch {
             print("❌ Sign out error: \(error)")
         }
     }
+    
+    
 }

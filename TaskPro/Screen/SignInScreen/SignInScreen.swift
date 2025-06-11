@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct SignInScreen: View {
     var body: some View {
@@ -46,14 +47,25 @@ struct SignInScreen: View {
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray.opacity(0.3), lineWidth: 1))
                     }
 
+                    SignInWithAppleButton(
+                        .signIn,
+                        onRequest: { request in
+                            request.requestedScopes = [.fullName, .email]
+                        },
+                        onCompletion: { result in
+                            AuthManager.shared.signInWithApple(result)
+                        }
+                    )
+                    .signInWithAppleButtonStyle(.black)
+                    .frame(height: 50)
+                    .cornerRadius(10)
+                    
+                    //Biomatries authentication
                     Button(action: {
-                        // Handle GitHub Sign-In
+                        AuthManager.shared.authenticationWithBioMetries()
                     }) {
                         HStack {
-                            Image("githubIcon") // Add `githubIcon` to Assets
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                            Text("Sign in with GitHub")
+                            Text("Login with Touch/Face Id")
                                 .fontWeight(.medium)
                         }
                         .frame(maxWidth: .infinity)
@@ -62,19 +74,6 @@ struct SignInScreen: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                     }
-
-//                    SignInWithAppleButton(
-//                        .signIn,
-//                        onRequest: { request in
-//                            request.requestedScopes = [.fullName, .email]
-//                        },
-//                        onCompletion: { result in
-//                            // Handle Apple Sign-In
-//                        }
-//                    )
-//                    .signInWithAppleButtonStyle(.black)
-//                    .frame(height: 50)
-//                    .cornerRadius(10)
                 }
                 .padding(.horizontal, 24)
 
